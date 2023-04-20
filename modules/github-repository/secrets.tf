@@ -9,3 +9,10 @@ resource "github_actions_secret" "api_deployer_access_key_secret" {
   repository      = github_repository.repository.name
   plaintext_value = var.ecr_deployer_aws_secret_access_key
 }
+
+resource "github_actions_secret" "api_deployer_aws_default_region" {
+  secret_name     = "AWS_DEFAULT_REGION"
+  repository      = github_repository.repository.name
+  plaintext_value = var.ecr_deployer_aws_default_region
+}
+

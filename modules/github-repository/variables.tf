@@ -63,3 +63,9 @@ variable "ecr_deployer_aws_secret_access_key" {
   default     = false
   sensitive   = true
 }
+
+variable "ecr_deployer_aws_default_region" {
+  description = "The ecr deployer region"
+  nullable    = false
+  default     = false
+}
