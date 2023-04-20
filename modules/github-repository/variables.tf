@@ -69,3 +69,9 @@ variable "ecr_deployer_aws_default_region" {
   nullable    = false
   default     = false
 }
+
+variable "github_token" {
+  description = "A github PAT with the right to push and commit on the api repository"
+  nullable    = false
+  default     = false
+}

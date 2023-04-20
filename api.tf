@@ -25,6 +25,7 @@ module "api_github_repository" {
   ecr_deployer_aws_access_key_id     = module.ecr_aws_deployer.ecr_deployer_iam_access_key_id
   ecr_deployer_aws_secret_access_key = module.ecr_aws_deployer.ecr_deployer_iam_access_key_secret
   ecr_deployer_aws_default_region    = "us-east-1"
+  github_token                       = var.github_token
 
   providers = {
     github = github

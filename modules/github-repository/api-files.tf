@@ -5,6 +5,7 @@ module "api_templates" {
   template_url = each.value.url_of_template
   template_variables = {
     PROJECT    = var.project
+    SERVICE    = var.service
     ABOUT      = var.about
     OWNER      = var.github_organization
     REPOSITORY = var.github_repository

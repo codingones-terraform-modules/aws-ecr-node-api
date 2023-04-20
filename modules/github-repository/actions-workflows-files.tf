@@ -18,6 +18,7 @@ module "workflow_template" {
   source       = "github.com/codingones/terraform-remote-template-renderer"
   template_url = "https://raw.githubusercontent.com/codingones/github-files-templates/main/github-actions/build-and-release-to-ecr.docker.aws.yml"
   template_variables = {
-    PROJECT = var.project
+    SERVICE      = var.service
+    ORGANIZATION = var.github_organization
   }
 }

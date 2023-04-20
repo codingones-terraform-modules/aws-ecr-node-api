@@ -64,3 +64,9 @@ variable "api_files" {
   }))
   nullable = false
 }
+
+variable "github_token" {
+  description = "A github PAT with the right to push and commit on the api repository"
+  nullable    = false
+  default     = false
+}
