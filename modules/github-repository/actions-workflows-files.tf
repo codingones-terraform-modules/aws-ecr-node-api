@@ -5,7 +5,7 @@
 resource "github_repository_file" "release_to_ecr" {
   repository          = github_repository.repository.name
   branch              = github_branch_default.main.branch
-  file                = ".github/workflows/build-and-release-to-ecr.docker.aws.yml"
+  file                = ".github/workflows/build-and-release-to-ecr.docker.yml"
   content             = module.workflow_template.rendered
   commit_message      = "feat: adding terraform apply workflow"
   commit_author       = var.commit_author_name
@@ -16,7 +16,7 @@ resource "github_repository_file" "release_to_ecr" {
 
 module "workflow_template" {
   source       = "github.com/codingones/terraform-remote-template-renderer"
-  template_url = "https://raw.githubusercontent.com/codingones/github-files-templates/main/github-actions/build-and-release-to-ecr.docker.aws.yml"
+  template_url = "https://raw.githubusercontent.com/codingones/github-files-templates/main/github-actions/build-and-release-to-ecr.docker.yml"
   template_variables = {
     SERVICE      = var.service
     ORGANIZATION = var.github_organization
