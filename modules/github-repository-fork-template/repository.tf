@@ -3,12 +3,12 @@ data "github_organization" "organization" {
 }
 
 resource "github_repository" "repository" {
-  name                   = "api"
-  description            = "This is an api repository, it host the api files and necessary definition for containerized deployment"
+  name                   = "${var.service}-infrastructure"
+  description            = "This is an infrastructure repository, it host the necessary github, terraform and aws configurations"
   visibility             = "public"
   auto_init              = true
   delete_branch_on_merge = true
-  topics                 = ["api", "node", "aws", "ecr", "docker"]
+  topics                 = ["terraform", "github", "aws"]
 }
 
 resource "github_branch_default" "main" {
@@ -24,6 +24,7 @@ resource "github_branch_protection" "main_branch_protection" {
   require_signed_commits          = true
   required_linear_history         = true
   require_conversation_resolution = true
+  allows_force_pushes             = true
 
   depends_on = [github_branch_default.main]
 }

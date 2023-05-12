@@ -17,9 +17,30 @@ A module that aims to provide a ready to develop configuration of a node api dep
 
 Example usage.
 
-This module rely on the previous deployment of admin-organisation.
+```terraform
+module "api_repository" {
+  source = "github.com/codingones-terraform-modules/aws-ecr-node-api"
 
-TODO
+  aws_organization    = local.project.aws_organizational_unit
+  github_organization = local.project.github_organization
+  github_repository   = "api"
+  project = local.project.name
+  service = "api"
+  github_token = var.github_token
+
+  about   = "A basic fastify api for project"
+  template_repository = "codingones-github-templates/aws-application-api-fastify"
+  policy = local.policies.api
+
+  providers = {
+    github = github
+    aws    = aws.child
+    http   = http
+  }
+
+  depends_on = [module.github_organization_variables]
+}
+```
 
 ## Contribution
 

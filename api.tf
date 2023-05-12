@@ -1,36 +1,60 @@
-module "ecr_aws_deployer" {
-  source = "github.com/codingones/terraform-aws-ecr-api-container/modules/aws-ecr-deployer"
+module "aws_deployer" {
+  source = "github.com/codingones-terraform-modules/aws-iam-deployer"
 
-  aws_organization = var.aws_organization
-  service          = var.service
-  ecr_policy       = var.ecr_policy
+  name                    = "${var.aws_organizational_unit}.${var.service}.infrastructure"
+  aws_organizational_unit = var.aws_organizational_unit
+  service                 = var.service
+  policy                  = var.policy
 
   providers = {
     aws = aws
   }
 }
 
-module "api_github_repository" {
-  source = "github.com/codingones/terraform-aws-ecr-api-container/modules/github-repository"
+module "github_repository" {
+  source = "github.com/codingones-terraform-modules/github-repository-fork-template"
 
   github_organization = var.github_organization
   github_repository   = var.github_repository
   project             = var.project
   service             = var.service
-  commit_author_name  = var.commit_author_name
-  commit_author_email = var.commit_author_email
-  api_files           = var.api_files
-  about               = var.about
-
-  ecr_deployer_aws_access_key_id     = module.ecr_aws_deployer.ecr_deployer_iam_access_key_id
-  ecr_deployer_aws_secret_access_key = module.ecr_aws_deployer.ecr_deployer_iam_access_key_secret
-  ecr_deployer_aws_default_region    = "us-east-1"
-  github_token                       = var.github_token
+  commit_author       = var.commit_author
+  commit_email        = var.commit_email
 
   providers = {
     github = github
     http   = http
   }
+}
 
-  depends_on = [module.ecr_aws_deployer]
+resource "github_actions_secret" "api_deployer_access_key_id" {
+  secret_name     = "AWS_ACCESS_KEY_ID"
+  repository      = var.github_repository
+  plaintext_value = module.aws_deployer.aws_deployer_iam_access_key_id
+
+  depends_on = [module.aws_deployer, module.github_repository]
+}
+
+resource "github_actions_secret" "api_deployer_access_key_secret" {
+  secret_name     = "AWS_SECRET_ACCESS_KEY"
+  repository      = var.github_repository
+  plaintext_value = module.aws_deployer.aws_deployer_iam_access_key_secret
+
+  depends_on = [module.aws_deployer, module.github_repository]
+}
+
+resource "github_actions_variable" "api_deployer_aws_default_region" {
+  variable_name = "AWS_DEFAULT_REGION"
+  repository    = var.github_repository
+  value         = "us-east-1"
+
+  depends_on = [module.aws_deployer, module.github_repository]
+}
+
+resource "github_actions_secret" "github_pat" {
+  secret_name     = "PAT"
+  repository      = var.github_repository
+  plaintext_value = var.github_token
+
+  depends_on = [module.aws_deployer, module.github_repository]
 }
